@@ -1,0 +1,32 @@
+.shift {
+  margin-top: 140px;
+}
+
+.jumbotron {
+  background-color: black;
+  padding: 0;
+  color: whitesmoke;
+}
+
+.navbar-toggler {
+  position: absolute;
+  right: 0;
+  top: -51px;
+}
+
+/* Oh, Bootstrap. Why must you be so specific? */
+.navbar-dark .navbar-nav .active > .nav-link,
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link.show,
+.navbar-dark .navbar-nav .show > .nav-link {
+  color: #ffc107;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #28a745;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 1px 1px #28a745;
+  outline: none;
+}

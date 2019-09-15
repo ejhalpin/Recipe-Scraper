@@ -1,0 +1,101 @@
+{{!-- lay out the recipe cards in a loop --}}
+{{#if saved}}
+{{#if result}}
+{{#each recipes}}
+
+<div class="card mb-2" id="{{_id}}">
+  <div class="card-header">
+    {{rating}}
+
+  </div>
+  <div class="card-body"
+    style="background-image:url({{img}}); background-repeat:no-repeat; background-position:right; background-size: contain;">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text"><a href="{{link}}" target="_">Go to Recipe</a></p>
+    <a href="#" class="btn btn-warning delete-recipe mb-1" data-id="{{_id}}">Delete Recipe</a> <br />
+    <a href="#" class="btn btn-success scrape-recipe mb-1" data-id="{{_id}}" data-link="{{link}}">Scrape This Recipe</a>
+    <br />
+    <a href="#" class="btn btn-outline-success mb-1" id="show-notes">Recipe Notes</a>
+  </div>
+</div>
+<div class="modal" id="notes-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Recipe Notes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" />
+          </div>
+          <div class="form-group">
+            <label for="note">Body</label>
+            <textarea id="note"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-success" type="submit" data-ref="{{_id}}">Save Notes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+        <div class="container mt-1">
+          {{#each note}}
+          <div class="card mb-1" id="{{note._id}}">
+            <h5 class="cart-title">{{note.title}}</h5>
+            <p class="card-text">{{note.body}}</p>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
+{{else}}
+{{!-- no recipes --}}
+<div class="card">
+  <div class="card-header">
+    No Recipes To Display
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Try Saving Some Recipes</h5>
+  </div>
+</div>
+
+{{/if}}
+{{else}}
+{{#if result}}
+{{#each recipes}}
+
+<div class="card mb-2" id="{{_id}}">
+  <div class="card-header">
+    {{rating}}
+
+  </div>
+  <div class="card-body"
+    style="background-image:url({{img}}); background-repeat:no-repeat; background-position:right; background-size: contain;">
+    <h5 class="card-title">{{title}}</h5>
+    <p class="card-text"><a href="{{link}}" target="_">Go to Recipe</a></p>
+    <a href="#" class="btn btn-success save-recipe" data-id="{{_id}}">Save Recipe</a>
+    <a href="#" class="btn btn-success scrape-recipe" data-id="{{_id}}">Scrape This Recipe</a>
+  </div>
+</div>
+
+{{/each}}
+{{else}}
+{{!-- no recipes --}}
+<div class="card">
+  <div class="card-header">
+    No Recipes To Display
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Try Scraping Some Recipes</h5>
+  </div>
+</div>
+
+{{/if}}
+{{/if}}

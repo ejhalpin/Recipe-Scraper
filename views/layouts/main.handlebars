@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- 
+quu..__                                                               
+ $$$b  `---.__                                                        
+  "$$b        `--.                          ___.---uuudP              
+   `$$b           `.__.------.__     __.---'      $$$$"              .
+     "$b          -' _          `-.-'            $$$"              .'|
+       ".           | |                         d$"             _.'  |
+         `.   /     | |                      ..."             .'     |
+           `./      | |___               ..::-'            _.'       |
+            /       |_____|           .:::-'            .-'         .'
+           :                          ::''\          _.'            | 
+          .' .-.             .-.           `.      .'               | 
+          : /'$$|           .#"$\           `.   .'              _.-' 
+         .'|$u$$|          |$$,$$|           |  <            _.-'     
+         | `:$$:'          :$$$$$:           `.  `.       .-'         
+         :                  `"--'             |    `-.     \          
+        :##.       ==             .###.       `.      `.    `\        
+        |##:                      :###:        |        >     >       
+        |#'     `..'`..'          `###'        x:      /     /        
+         \                                   xXX|     /    ./         
+          \                                xXXX'|    /   ./           
+          /`-.                                  `.  /   /             
+         :    `-  ...........,                   | /  .'              
+         |         ``:::::::'       .            |<    `.             
+         |             ```          |           x| \ `.:``.           
+         |                         .'    /'   xXX|  `:`M`M':.         
+         |    |                    ;    /:' xXXX'|  -'MMMMM:'         
+         `.  .'                   :    /:'       |-'MMMM.-'           
+          |  |                   .'   /'        .'MMM.-'              
+          `'`'                   :  ,'          |MMM<                 
+            |                     `'            |tbap\                
+             \                                  :MM.-'                
+              \                 |              .''                    
+               \.               `.            /                       
+                /     .:::::::.. :           /                        
+               |     .:::::::::::`.         /                         
+               |   .:::------------\       /                          
+              /   .''               >::'  /                           
+              `',:                 :    .'                            
+                                   `:.:'                     
+You're Welcome.
+ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- jquery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <!-- Bootstrap js -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+  <!-- Local Logic -->
+  <script src="assets/js/logic.js"></script>
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Document</title>
+</head>
+
+<body>
+  <!--The NavBar, which is also a jumbotron. Next level-->
+  <div class=".container-fluid">
+    <div class="fixed-top jumbotron jumbotron-fluid">
+      <div class="container-fluid">
+        <h1 class="display-4">Recipe Scraper</h1>
+        <nav class="navbar navbar-expand-md navbar-dark">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active theme">
+                <a class="nav-link " href="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/saved">Saved Recipes</a>
+              </li>
+            </ul>
+            <div class="button-box">
+              <button class="btn btn-outline-success my-2 my-sm-0" id="scrape-recipes">Scrape New Recipes</button>
+              <button class="btn btn-outline-warning my-2 my-sm-0" id="clear-recipes">Clear Recipes</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <div class="container shift">
+      {{{ body }}}
+    </div>
+  </div>
+  <div class="modal" id="loading-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img src="https://media.giphy.com/media/WEkCZf15CAud2/giphy.gif" />
+          <p>This could take a while...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
