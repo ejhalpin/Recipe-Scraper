@@ -35,3 +35,8 @@
   max-width: 250px;
   align-self: center;
 }
+
+#note-body {
+  height: 10rem;
+  width: 100%;
+}
