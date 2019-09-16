@@ -165,7 +165,7 @@ module.exports = function(app) {
               db.savedRecipe
                 .findByIdAndUpdate(req.params.id, { $push: { detail: detail._id } }, { new: true })
                 .then(updatedRecipe => {
-                  res.redirect("/detail/" + updatedRecipe._id);
+                  res.redirect("/details/" + updatedRecipe._id);
                 })
                 .catch(err => {
                   res.json(err);
@@ -175,6 +175,47 @@ module.exports = function(app) {
               res.json(err);
             });
         });
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
+
+  app.post("/api/note/:id", (req, res) => {
+    db.Note.create(req.body)
+      .then(newNote => {
+        console.log(newNote);
+        db.savedRecipe
+          .findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id) }, { $push: { note: newNote._id } }, { new: true })
+          .then(updatedRecipe => {
+            console.log("UPDATED RECIPE---------------------------->");
+            console.log(updatedRecipe);
+            console.log("<_-----------------------------------");
+            res.redirect("/details/" + updatedRecipe._id);
+          })
+          .catch(err => {
+            res.status(500).json(err);
+          });
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      });
+  });
+
+  app.post("/api/delete/", (req, res) => {
+    //first, disassociate the note from savedRecipes....
+    db.savedRecipe
+      .findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.body.recipeId) }, { $pull: { note: mongoose.Types.ObjectId(req.body.id) } }, { new: true })
+      .then(updatedRecipe => {
+        console.log("DELETED REFERENCE!!!--------------------->");
+        console.log(updatedRecipe);
+        db.Note.deleteOne({ _id: mongoose.Types.ObjectId(req.body.id) })
+          .then(data => {
+            res.json(data);
+          })
+          .catch(err => {
+            res.status(500).json(err);
+          });
       })
       .catch(err => {
         res.status(500).json(err);

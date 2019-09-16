@@ -35,6 +35,7 @@ module.exports = function(app) {
           console.log("redirecting...");
           res.redirect("/api/details/" + data._id);
         } else {
+          console.log(data);
           res.location("/details").render("details", data);
         }
       })
