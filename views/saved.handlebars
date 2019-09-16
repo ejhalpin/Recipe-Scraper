@@ -9,11 +9,12 @@
   <div class="card-body"
     style="background-image:url({{img}}); background-repeat:no-repeat; background-position:right; background-size: contain;">
     <h5 class="card-title">{{title}}</h5>
-    <p class="card-text"><a href="{{link}}" target="_">View Original Reciped</a></p>
-    <a href="#" class="btn btn-success save-recipe" data-id="{{_id}}">Save Recipe</a>
+    <p class="card-text"><a href="{{link}}" target="_">View Original Recipe</a></p>
+    <a href="#" class="btn btn-danger delete-recipe mb-1" data-id="{{_id}}">Delete Recipe</a>
+    <a href="/details/{{id}}" class="btn btn-success show-details mb-1">Recipe
+      Details</a>
   </div>
 </div>
-
 {{/each}}
 {{else}}
 {{!-- no recipes --}}
@@ -22,7 +23,7 @@
     No Recipes To Display
   </div>
   <div class="card-body">
-    <h5 class="card-title">Try Scraping Some Recipes</h5>
+    <h5 class="card-title">Try Saving Some Recipes</h5>
   </div>
 </div>
 

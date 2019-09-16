@@ -1,0 +1,39 @@
+<div class="container">
+  <h5 class="display-4">{{title}}</h5>
+  <img src="{{img}}" />
+  <div class="row">
+    {{#each detail.times as |item|}}
+    <div class="col-4">
+      {{item}}
+    </div>
+    {{/each}}
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h2>Ingredients</h2>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-6">
+      <ul>
+        {{#each detail.ingredients as |ingr|}}
+        <li>{{ingr}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="col-3"></div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h2>Instructions</h2>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-8">
+      <ol>
+        {{#each detail.steps as |step|}}
+        <li>{{step}}</li>
+        {{/each}}
+      </ol>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</div>

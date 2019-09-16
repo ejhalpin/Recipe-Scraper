@@ -7,29 +7,11 @@ var cheerio = require("cheerio");
 var mongoose = require("mongoose");
 
 module.exports = function(app) {
-  app.get("/", (req, res) => {
-    db.Recipe.find({}, function(error, recipes) {
-      // Throw any errors to the console
-      if (error) {
-        console.log(error);
-      }
-      // If there are no errors, send the data to the browser as json
-      else {
-        res.render("index", { recipes: recipes, result: recipes.length > 0, saved: false });
-      }
-    });
-  });
   app.get("/scrape", (req, res) => {
     //scrape allrecipes.com and get the featured recipes
     axios.get("https://www.allrecipes.com/").then(function(response) {
-      // Load the HTML into cheerio and save it to a variable
-      // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
       var $ = cheerio.load(response.data);
-
-      // Select each element in the HTML body from which you want information.
-      // NOTE: Cheerio selectors function similarly to jQuery's selectors,
-      // but be sure to visit the package's npm page to see how it works
-
+      var recipes = [];
       $("article").each(function(i, element) {
         var title = $(element)
           .find("div.fixed-recipe-card__info")
@@ -54,22 +36,23 @@ module.exports = function(app) {
           .children("div.fixed-recipe-card__ratings")
           .children("span.stars")
           .attr("aria-label");
-        db.Recipe.create({
+        var recipe = {
           title: title,
           link: link,
           img: img,
           rating: rating
-        });
+        };
+        db.Recipe.create(recipe);
+        recipes.push(recipe);
       });
-      res.send();
+      res.json(recipes);
     });
   });
 
   app.get("/save/:id", (req, res) => {
-    console.log(req.params.id);
     db.Recipe.findById(req.params.id, function(err, recipe) {
       if (err) {
-        console.log(err);
+        return res.status(500).json(err);
       }
       var copy = {
         title: recipe.title,
@@ -78,9 +61,12 @@ module.exports = function(app) {
         rating: recipe.rating
       };
       db.savedRecipe.create(copy, function(err, savedRecipe) {
+        if (err) {
+          return res.status(500).json(err);
+        }
         db.Recipe.deleteOne({ _id: recipe._id }, function(err) {
           if (err) {
-            res.json(err);
+            return res.status(500).json(err);
           } else {
             res.json(savedRecipe);
           }
@@ -92,16 +78,14 @@ module.exports = function(app) {
   app.get("/delete/:id", (req, res) => {
     db.savedRecipe.findById(req.params.id, function(err, recipe) {
       if (err) {
-        res.json(err);
-      } else {
-        db.savedRecipe.deleteOne({ _id: recipe._id }, function(err) {
-          if (err) {
-            res.json(err);
-          } else {
-            res.send();
-          }
-        });
+        return res.status(500).json(err);
       }
+      db.savedRecipe.deleteOne({ _id: recipe._id }, function(err) {
+        if (err) {
+          return res.status(500).json(err);
+        }
+        res.send();
+      });
     });
   });
 
@@ -111,7 +95,7 @@ module.exports = function(app) {
         console.log("clearing recipes");
         db.Recipe.deleteMany({}, function(err) {
           if (err) {
-            res.json({ err: err });
+            res.status(500).json(err);
           } else {
             res.redirect("/");
           }
@@ -122,25 +106,78 @@ module.exports = function(app) {
         console.log("clearing saved recipes");
         db.savedRecipe.deleteMany({}, function(err) {
           if (err) {
-            res.json(err);
-          } else {
-            res.send();
+            return res.status(500).json(err);
           }
+          res.send();
         });
+        break;
     }
   });
 
-  app.get("/saved", (req, res) => {
+  app.get("/api/details/:id", (req, res) => {
+    console.log(req.params.id);
     db.savedRecipe
-      .find({})
-      .populate("notes")
-      .then(function(recipes) {
-        // If there are no errors, send the data to the browser as json
-        console.log(recipes);
-        res.render("index", { recipes: recipes, result: recipes.length > 0, saved: true });
+      .findById(req.params.id)
+      .then(data => {
+        //scrape the recipe...
+        axios.get(data.link).then(function(response) {
+          var $ = cheerio.load(response.data);
+          var ingredients = [];
+          var times = [];
+          var steps = [];
+          //find the ingredients
+          $("ul.checklist").each(function(i, element) {
+            $(element)
+              .children("li")
+              .each(function(j, listitems) {
+                var li = $(listitems)
+                  .children("label")
+                  .children("span")
+                  .text()
+                  .trim();
+                if (li.includes("Add all")) {
+                  li = "";
+                }
+                if (li) {
+                  ingredients.push(li);
+                }
+              });
+          });
+          //find the times
+          $("li.prepTime__item").each(function(i, element) {
+            var time = $(element).attr("aria-label");
+            if (time) {
+              times.push(time);
+            }
+          });
+          $("span.recipe-directions__list--item").each(function(i, element) {
+            var direction = $(element).text();
+            if (direction) {
+              steps.push(direction);
+            }
+          });
+          db.Details.create({
+            ingredients: ingredients,
+            times: times,
+            steps: steps
+          })
+            .then(detail => {
+              db.savedRecipe
+                .findByIdAndUpdate(req.params.id, { $push: { detail: detail._id } }, { new: true })
+                .then(updatedRecipe => {
+                  res.redirect("/detail/" + updatedRecipe._id);
+                })
+                .catch(err => {
+                  res.json(err);
+                });
+            })
+            .catch(err => {
+              res.json(err);
+            });
+        });
       })
       .catch(err => {
-        res.json(err);
+        res.status(500).json(err);
       });
   });
 };

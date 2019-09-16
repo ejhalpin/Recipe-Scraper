@@ -6,7 +6,10 @@ var Detail = mongoose.model(
     ingredients: {
       type: [String]
     },
-    step: {
+    steps: {
+      type: [String]
+    },
+    times: {
       type: [String]
     }
   })
